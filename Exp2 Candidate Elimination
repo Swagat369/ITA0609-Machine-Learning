@@ -1,0 +1,39 @@
+import pandas as pd
+
+data = pd.read_csv("trainingdata.csv")
+
+print("Training Data:\n")
+print(data)
+
+concepts = data.iloc[:, :-1].values
+target = data.iloc[:, -1].values
+
+S = concepts[0].copy()
+
+G = [['?' for _ in range(len(S))] for _ in range(len(S))]
+
+for i, h in enumerate(concepts):
+
+    if target[i].lower() == "yes":
+
+        for j in range(len(S)):
+            if h[j] != S[j]:
+                S[j] = '?'
+                G[j][j] = '?'
+
+    else:
+
+        for j in range(len(S)):
+            if h[j] != S[j]:
+                G[j][j] = S[j]
+            else:
+                G[j][j] = '?'
+
+G = [g for g in G if g != ['?' for _ in range(len(S))]]
+
+print("\nFinal Specific Hypothesis (S):")
+print(S)
+
+print("\nFinal General Hypothesis (G):")
+for hypothesis in G:
+    print(hypothesis)
